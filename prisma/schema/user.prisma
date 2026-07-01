@@ -1,0 +1,75 @@
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  password        String   // Only if using custom auth, otherwise nullable
+  role            UserRole  @default(STUDENT)
+
+  // Profile
+  fullName        String?
+  displayName     String?
+  bio             String?
+  avatarUrl       String?
+  university      String?
+  campus          String?
+  department      String?
+  year            Int?
+  skills          String[]  // e.g. ["Programming", "Design"]
+
+  // Stats
+  averageRating   Float     @default(0)
+  totalReviews    Int       @default(0)
+  totalSessions   Int       @default(0)
+
+  // Verification
+  isEmailVerified Boolean   @default(false)
+  isStudentVerified Boolean @default(false)
+
+  // Security & Status
+  isBlocked       Boolean @default(false)
+  isDeleted       Boolean @default(false)
+  deactivatedAt   DateTime?
+  deletedAt       DateTime? // Soft delete
+  lastActiveAt    DateTime  @default(now())
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  otps            Otp[]
+  skillPosts      SkillPost[]
+  matchesAsA      Match[]   @relation("MatchA")
+  matchesAsB      Match[]   @relation("MatchB")
+  sessionParticipants SessionParticipant[]
+  skillExchanges  SkillExchange[]
+  reviewsGiven    Review[]  @relation("ReviewGiver")
+  reviewsReceived Review[]  @relation("ReviewReceiver")
+  reportsMade     Report[]  @relation("ReportReporter")
+  reportsReceived Report[]  @relation("ReportReported")
+  announcements   Announcement[] @relation("AnnouncementCreator")
+
+  // --- MESSAGING LAYER ---
+  ssentMessages      Message[]           @relation("MessageSender")
+  conversationsAsA  Conversation[]      @relation("ConversationUserA")
+  conversationsAsB  Conversation[]      @relation("ConversationUserB")
+
+  @@map("users")
+  reports Report[]
+  notifications Notification[]
+}
+
+model Otp {
+  id         String    @id @default(uuid())
+  userId     String
+  codeHash   String
+  type       OtpType
+  expiresAt  DateTime
+  used       Boolean   @default(false)
+  attempts   Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, type])
+}
+

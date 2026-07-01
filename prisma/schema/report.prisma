@@ -1,0 +1,21 @@
+model Report {
+  id            String        @id @default(uuid())
+  reason        String
+  description   String?
+  status        ReportStatus  @default(PENDING)
+
+  reporterId    String
+  reportedId    String?
+  reportedPostId String?
+  reportedMessageId String?
+
+  createdAt     DateTime      @default(now())
+  resolvedAt    DateTime?
+  resolvedById  String?
+
+  reporter      User          @relation("ReportReporter", fields: [reporterId], references: [id])
+  reported      User?         @relation("ReportReported", fields: [reportedId], references: [id])
+  resolvedBy    User?         @relation(fields: [resolvedById], references: [id])
+
+  @@map("reports")
+}

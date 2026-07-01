@@ -1,0 +1,44 @@
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+enum SkillType {
+  TEACH
+  LEARN
+}
+
+enum SessionStatus {
+  PENDING
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DECLINED
+}
+
+enum SessionFormat {
+  IN_PERSON
+  ONLINE
+}
+
+enum MatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  BLOCKED
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  RESOLVED
+  DISMISSED
+}
+enum OtpType {
+  RESET_PASSWORD
+  EMAIL_VERIFY
+  LOGIN
+}
+
+

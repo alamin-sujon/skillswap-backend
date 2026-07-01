@@ -1,0 +1,17 @@
+model Notification {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  body        String
+  isRead      Boolean  @default(false)
+  type        String   // e.g. "NEW_MATCH", "SESSION_REMINDER", "MESSAGE", "REVIEW"
+
+  data        Json?    // For deep linking / extra info
+
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@map("notifications")
+}

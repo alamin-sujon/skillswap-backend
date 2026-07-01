@@ -1,0 +1,69 @@
+model SkillPost {
+  id              String    @id @default(uuid())
+  type            SkillType
+  title           String
+  category        String
+  description     String
+  tags            String[]
+
+  availability    String?
+  preferredFormat SessionFormat?
+  isActive        Boolean   @default(true)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  skillExchanges  SkillExchange[]
+  matches         Match[]         // ← new back-relation
+
+  @@index([type, category, isActive])
+  @@index([userId])
+  @@map("skill_posts")
+}
+
+model Match {
+  id           String      @id @default(uuid())
+
+  userAId      String
+  userBId      String
+  skillPostId  String                // ← the SkillPost that triggered this match
+  status       MatchStatus @default(PENDING)
+
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  userA        User        @relation("MatchA", fields: [userAId], references: [id])
+  userB        User        @relation("MatchB", fields: [userBId], references: [id])
+  skillPost    SkillPost   @relation(fields: [skillPostId], references: [id])
+
+  sessions     Session[]
+
+  @@unique([userAId, userBId, skillPostId])  // ← triple unique
+  @@index([status])
+  @@map("matches")
+}
+
+
+model SkillExchange {
+  id            String   @id @default(uuid())
+
+  sessionId     String
+  userId        String
+
+  skillPostId   String?
+  skillTitle    String
+  category      String
+  description   String?
+
+  createdAt     DateTime @default(now())
+
+  session       Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id])
+  skillPost     SkillPost? @relation(fields: [skillPostId], references: [id])
+
+  @@map("skill_exchanges")
+}

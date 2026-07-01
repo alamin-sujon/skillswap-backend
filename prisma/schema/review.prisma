@@ -1,0 +1,18 @@
+model Review {
+  id          String   @id @default(uuid())
+  rating      Int      @default(5) // 1-5
+  comment     String?
+  createdAt   DateTime @default(now())
+
+  reviewerId  String
+  reviewedId  String
+  sessionId   String
+
+  reviewer    User     @relation("ReviewGiver", fields: [reviewerId], references: [id])
+  reviewed    User     @relation("ReviewReceiver", fields: [reviewedId], references: [id])
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewerId, sessionId]) // One review per user per session
+  @@index([reviewedId])
+  @@map("reviews")
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-time Chat Tester</title>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+</head>
+<body>
+    <h2>NestJS Real-time Chat Log Console</h2>
+    <p>Open your Browser Developer Tools Console (F12) to inspect active websocket streams.</p>
+
+    <script>
+        const CONVERSATION_ID = "replace-with-a-real-postgres-convo-uuid";
+
+        // 1. Initialize the Gateway connection with auth payload
+        const socket = io("http://localhost:3000/chat", {
+            auth: {
+                token: "mock-test-token"
+            }
+        });
+
+        socket.on("connect", () => {
+            console.log("🟢 Connected to WebSocket Server! ID:", socket.id);
+
+            // 2. Automatically request to join the target text channel room
+            socket.emit("joinConversation", { conversationId: CONVERSATION_ID }, (ack) => {
+                console.log("📥 Server Join Room Acknowledgment:", ack);
+            });
+        });
+
+        // 3. Listen for incoming live text messages streaming from the backend
+        socket.on("newMessage", (messagePayload) => {
+            console.log("💬 LIVE MESSAGE RECEIVED:", messagePayload);
+        });
+
+        // 4. Listen for structural global sidebar updates (FB Messenger Style)
+        socket.on("inboxUpdate", (sidebarData) => {
+            console.log("🗂️ SIDEBAR UPDATE NOTIFICATION:", sidebarData);
+        });
+
+        socket.on("disconnect", (reason) => {
+            console.log("🔴 Disconnected from server:", reason);
+        });
+
+        // Helper function you can invoke directly inside your browser console window
+        function triggerTestSend(text) {
+            socket.emit("sendMessage", {
+                conversationId: CONVERSATION_ID,
+                content: text
+            });
+        }
+    </script>
+</body>
+</html>

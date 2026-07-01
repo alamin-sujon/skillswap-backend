@@ -1,0 +1,41 @@
+model Session {
+  id              String         @id @default(uuid())
+  title           String?
+  date            DateTime
+  durationMinutes Int?
+  format          SessionFormat
+  location        String?
+  meetingLink     String?
+
+  status          SessionStatus  @default(PENDING)
+  notes           String?
+
+  matchId         String
+  match           Match          @relation(fields: [matchId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  participants    SessionParticipant[]
+  skillExchanges  SkillExchange[]
+  reviews         Review[]
+
+  @@index([status, date])
+  @@map("sessions")
+}
+
+model SessionParticipant {
+  id         String   @id @default(uuid())
+  
+  sessionId  String
+  userId     String
+
+  joinedAt   DateTime @default(now())
+  attended   Boolean  @default(true)
+
+  session    Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@unique([sessionId, userId])
+  @@map("session_participants")
+}
