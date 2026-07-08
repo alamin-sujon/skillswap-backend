@@ -64,6 +64,7 @@ export class MatchesService {
           select: {
             id: true,
             displayName: true,
+            fullName: true,
             avatarUrl: true,
             averageRating: true,
           },
@@ -71,6 +72,7 @@ export class MatchesService {
         userB: {
           select: {
             id: true,
+            fullName: true,
             displayName: true,
             avatarUrl: true,
             averageRating: true,
