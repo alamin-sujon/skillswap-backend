@@ -21,7 +21,7 @@ export class AuthController {
 
   // signUp route
   @Public()
-  @Post('singup')
+  @Post('signup')
   @ApiBody({ type: CreateAuthDto })
   @ApiOperation({ summary: 'User SignUp' })
   async signUp(@Body() createAuthDto: CreateAuthDto) {
