@@ -81,13 +81,13 @@ export class SessionsService {
       include: {
         match: {
           include: {
-            userA: { select: { id: true, displayName: true, avatarUrl: true } },
-            userB: { select: { id: true, displayName: true, avatarUrl: true } },
+            userA: { select: { id: true, displayName: true, avatarUrl: true, fullName: true } },
+            userB: { select: { id: true, displayName: true, avatarUrl: true, fullName: true } },
           },
         },
         participants: {
           include: {
-            user: { select: { id: true, displayName: true, avatarUrl: true } },
+            user: { select: { id: true, displayName: true, avatarUrl: true, fullName: true } },
           },
         },
         skillExchanges: true,

@@ -33,6 +33,7 @@ export class MatchesController {
    */
   @Get()
   getMyMatches(@Request() req) {
+    console.log({id: req.user})
     return this.matchesService.getMyMatches(req.user.id);
   }
 

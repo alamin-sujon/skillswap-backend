@@ -15,6 +15,7 @@ import { SessionsModule } from './module/sessions/sessions.module';
 import { MatchesModule } from './module/matches/matches.module';
 import { MessagesModule } from './module/massages/massages.module';
 // import { MassagesModule } from './module/massages/massages.module';
+import { NotificationsModule } from './module/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { MessagesModule } from './module/massages/massages.module';
     SkillsModule,
     SessionsModule,
     MatchesModule,
-    MessagesModule
+    MessagesModule,
+    NotificationsModule
   ],
   providers: [SeederService],
 })

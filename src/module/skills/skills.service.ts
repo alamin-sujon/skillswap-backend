@@ -17,7 +17,7 @@ export class SkillsService {
         ...dto,
         userId,
       },
-      include: { user: { select: { displayName: true, avatarUrl: true } } },
+      include: { user: { select: { displayName: true, avatarUrl: true, fullName: true } } },
     });
   }
   async createmany(userId: string, dtos: CreateSkillPostDto[]) {
@@ -56,6 +56,7 @@ export class SkillsService {
             displayName: true,
             avatarUrl: true,
             averageRating: true,
+            fullName: true
           },
         },
       },
